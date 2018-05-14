@@ -1,8 +1,10 @@
 #!/bin/bash
-
-now="$(date +'%d-%m-%Y')"
-threads="$(cat urls.txt | wc -l)"
-echo $threads
-mkdir $now
-timeout $1 aria2c -j $threads -i urls.txt -d $now
-./radio_archiving.sh
+for (( ; ; ))
+do
+	now="$(date +'%d-%m-%Y')"
+	threads="$(cat urls.txt | wc -l)"
+	echo $threads
+	mkdir $now
+	timeout $1 aria2c -j $threads -i urls.txt -d $now | cd $now
+	rclone copy . $2:"Radio:/$now"
+done
