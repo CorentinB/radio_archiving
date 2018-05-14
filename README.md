@@ -1,4 +1,4 @@
-# radio_archiving
+# Radio Archiving
 Tools for (web) radio stations archiving.
 
 # Usage
