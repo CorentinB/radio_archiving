@@ -7,4 +7,5 @@ do
 	mkdir $now
 	timeout $1 aria2c -j $threads -i urls.txt -d $now
 	rclone move $now $2:Radio/$now &
+	rm -rf $now
 done
