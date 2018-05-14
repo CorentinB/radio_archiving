@@ -1,10 +1,10 @@
 #!/bin/bash
 for (( ; ; ))
 do
-	now="$(date +'%d-%m-%Y')"
+	now="$(date +'%d-%m-%Y-%H-%M-%S')"
 	threads="$(cat urls.txt | wc -l)"
 	echo $threads
 	mkdir $now
 	timeout $1 aria2c -j $threads -i urls.txt -d $now
-	rclone move $now $2:Radio/$now
+	rclone move $now $2:Radio/$now &
 done
