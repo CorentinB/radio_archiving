@@ -1,4 +1,3 @@
-test
 http://direct.franceinter.fr/live/franceinter-midfi.mp98
 http://direct.franceinter.fr/live/franceinter-midfi.mp3
 http://direct.franceinfo.fr/live/franceinfo-midfi.mp3

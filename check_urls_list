@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xargs -l < urls.txt ./dependencies/check_url
