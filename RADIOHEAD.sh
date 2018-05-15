@@ -30,7 +30,7 @@ function _ProjectNameInput() {
 
 function _gdriveInput() {
   local TITLE="Gsuite Name Input Box"
-  local PROMPT="What is your project name?"
+  local PROMPT="Rclone Gdrive account name for uploading?"
   local passECHO="Gdrive account for uploading will be $GDRIVE:"
   GDRIVE=$(
     whiptail --title "$TITLE" --inputbox "$PROMPT" 10 60 3>&1 1>&2 2>&3
@@ -51,10 +51,10 @@ function _PickTime() {
   local passECHO="Your chosen option: $PICKTIME"
   PICKTIME=$(
     whiptail --title "$TITLE" --menu "$PROMPT" 15 60 4 \
-    "5m" \
-    "1h" \
-    "12h" \
-    "24h" 3>&1 1>&2 2>&3
+    "1" "5m" \
+    "2" "1h" \
+    "3" "12h" \
+    "4" "24h" 3>&1 1>&2 2>&3
   )
 
   exitstatus=$?

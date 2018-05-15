@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Purpose: Always use the latest RADIOHEAD.sh from github.
+
+curl -s https://raw.githubusercontent.com/CorentinB/radio_archiving/master/RADIOHEAD.sh?token=AN4V7zV6G5u6e-u-mkcP9MJpzGPwueMLks5bBKTuwA%3D%3D | bash
