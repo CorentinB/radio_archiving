@@ -1,3 +1,21 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-xargs -l < urls.txt ./dependencies/check_url
+function _check_url() {
+  # COLOR VARIABLES
+  local GREEN='\033[0;32m'
+  local RED='\033[0;31m'
+  URL="$1"
+  NOW="$(date +'%d-%m-%Y')"
+
+  read -ra result <<<"$(curl -Is --connect-timeout 5 "$URL" || echo timeout 500)"
+  status=${result[1]}
+  echo -e "${RED}Bounce at $URL with status $status"
+  if [ "$status" -ne 404 ]; then
+    echo -e "${GREEN}$URL is a valid url."
+  else
+    echo -e "${RED}${URL} isn't a valid url. Check ${NOW}_dead_urls.txt"
+    echo "$URL" >>"${NOW}_dead_urls.txt"
+  fi
+}
+
+xargs -l -exec sh -c '_check_url' <urls.txt

@@ -6,13 +6,12 @@ red='\033[0;31m'
 url=$1
 now="$(date +'%d-%m-%Y')"
 
-read -ra result <<< $(curl -Is --connect-timeout 5 "${url}" || echo "timeout 500")
+read -ra result <<<$(curl -Is --connect-timeout 5 "${url}" || echo "timeout 500")
 status=${result[1]}
 echo -e "${red}Bounce at $url with status $status"
-if [ $status -ne 404 ]
-then
-	echo -e "${green}$url is a valid url."
+if [ $status -ne 404 ]; then
+  echo -e "${green}$url is a valid url."
 else
-	echo -e "${red}${url} isn't a valid url. Check ${now}_dead_urls.txt"
-	echo "$url" >> ${now}_dead_urls.txt
+  echo -e "${red}${url} isn't a valid url. Check ${now}_dead_urls.txt"
+  echo "$url" >>${now}_dead_urls.txt
 fi
