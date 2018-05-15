@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Path to the urls.txt file. Is used as input for downloading with axel
-URLS=("${HOME}"/files/"$2"/urls.txt)
+URLS="$HOME/urls.txt"
 PROJECTPATH="$HOME/$project_NAME"
 
 function _jim() {
@@ -14,14 +14,17 @@ function _polly() {
 }
 
 function _ProjectNameInput() {
-  #!/bin/bash
-  local project_NAME
-  project_NAME=$(whiptail --title "Project Name Input Box" --inputbox "What is your project name?" 10 60 3>&1 1>&2 2>&3)
+  local TITLE="Project Name Input Box"
+  local PROMPT="What is your project name?"
+  project_NAME=$(whiptail --title "$TITLE" --inputbox "$PROMPT" 10 60 3>&1 1>&2 2>&3)
 
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
-    echo "Your project path is:" "$HOME/$project_NAME"
-    mkdir -p "$HOME"/"$PROJECT"
+    local exitTITLE="Confirmation"
+    local exitMSG="Your project path is: $HOME/$project_NAME"
+    whiptail --title "$exitTITLE" --msgbox "$exitMSG" 10 60
+    echo
+    mkdir -p "$PROJECTPATH"
     sleep 2
   else
     _polly
@@ -31,14 +34,15 @@ function _ProjectNameInput() {
 function _gdriveInput() {
   local TITLE="Gsuite Name Input Box"
   local PROMPT="Rclone Gdrive account name for uploading?"
-  local passECHO="Gdrive account for uploading will be $GDRIVE:"
   GDRIVE=$(
     whiptail --title "$TITLE" --inputbox "$PROMPT" 10 60 3>&1 1>&2 2>&3
   )
 
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
-    echo "$passECHO"
+    local exitTITLE="Confirmation"
+    local exitMSG="Gdrive account for uploading will be $GDRIVE:"
+    whiptail --title "$exitTITLE" --msgbox "$exitMSG" 10 60
     sleep 2
   else
     _polly
@@ -48,7 +52,6 @@ function _gdriveInput() {
 function _PickTime() {
   local TITLE="Time Length Menu Dialog"
   local PROMPT="Choose the duration of the radio stream to be saved"
-  local passECHO="Your chosen option: $PICKTIME"
   PICKTIME=$(
     whiptail --title "$TITLE" --menu "$PROMPT" 15 60 4 \
     "1" "5m" \
@@ -59,7 +62,9 @@ function _PickTime() {
 
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
-    echo "$passECHO"
+    local exitTITLE="Confirmation"
+    local exitMSG="Your chosen option: $PICKTIME"
+    whiptail --title "$exitTITLE" --msgbox "$exitMSG" 10 60
     sleep 2
   else
     _polly
