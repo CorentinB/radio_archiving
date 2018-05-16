@@ -9,8 +9,10 @@ function _jim() {
 }
 
 function _polly() {
-  URL=$(curl parrot.live)
-  whiptail --title "YOU SHALL NOT PASS" --msgbox "$URL" 10 60
+  whiptail --title "YOU SHALL NOT PASS" \
+  --msgbox Exiting 10 60
+  clear
+  curl -s parrot.live
 }
 
 function _ProjectNameInput() {
@@ -25,7 +27,6 @@ function _ProjectNameInput() {
     whiptail --title "$exitTITLE" --msgbox "$exitMSG" 10 60
     echo
     mkdir -p "$PROJECTPATH"
-    sleep 2
   else
     _polly
   fi
@@ -43,7 +44,6 @@ function _gdriveInput() {
     local exitTITLE="Confirmation"
     local exitMSG="Gdrive account for uploading will be $GDRIVE:"
     whiptail --title "$exitTITLE" --msgbox "$exitMSG" 10 60
-    sleep 2
   else
     _polly
   fi
@@ -65,7 +65,6 @@ function _PickTime() {
     local exitTITLE="Confirmation"
     local exitMSG="Your chosen option: $PICKTIME"
     whiptail --title "$exitTITLE" --msgbox "$exitMSG" 10 60
-    sleep 2
   else
     _polly
   fi
