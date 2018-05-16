@@ -88,7 +88,7 @@ function _parallelize() {
     '--retries=3'
     '--pipepart'
   )
-  
+
   local wgetARGS=(
     '--random-wait'
     '--no-clobber'
@@ -98,7 +98,7 @@ function _parallelize() {
     "--timeout=0"
   )
   local WGET=$(timeout "$PICKTIME" wget "${wgetARGS[@]}" {})
-  parallel "${parallelARGS[@]}" "$WGET" :::: $URLS
+  cat $URLS | parallel "${parallelARGS[@]}" "$WGET"
 }
 
 _ProjectNameInput && _gdriveInput && _PickTime && _parallelize
