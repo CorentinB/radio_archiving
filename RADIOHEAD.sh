@@ -88,7 +88,6 @@ function _parallelize() {
     '--retries=3'
   )
   local wgetARGS=(
-    "-O=$HOME/$project_NAME"
     '--random-wait'
     '--no-clobber'
     "--append-output=$PROJECTPATH/_Wget.log"
@@ -96,8 +95,8 @@ function _parallelize() {
     "--directory-prefix=$PROJECTPATH"
     "--timeout=0"
   )
-  local WGET=$(timeout "$PICKTIME" wget "${wgetARGS[@]}")
-  parallel "${parallelARGS[@]}" "${WGET[*]}" {1} :::: $URLS
+  local WGET=$(timeout "$PICKTIME" wget "${wgetARGS[@]}" {})
+  parallel "${parallelARGS[@]}" "$WGET" :::: $URLS
 }
 
 _ProjectNameInput && _gdriveInput && _PickTime && _parallelize
