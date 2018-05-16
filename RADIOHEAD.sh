@@ -2,11 +2,6 @@
 
 # Path to the urls.txt file. Is used as input for downloading with axel
 URLS="$HOME/urls.txt"
-PROJECTPATH="$HOME/$project_NAME"
-
-function _jim() {
-  "$@" || { echo "he's dead jim: $@" && exit 1; }
-}
 
 function _polly() {
   whiptail --title "YOU SHALL NOT PASS" \
@@ -22,11 +17,11 @@ function _ProjectNameInput() {
 
   exitstatus=$?
   if [ $exitstatus = 0 ]; then
+    mkdir -p "$HOME/$project_NAME"
     local exitTITLE="Confirmation"
     local exitMSG="Your project path is: $HOME/$project_NAME"
     whiptail --title "$exitTITLE" --msgbox "$exitMSG" 10 60
-    echo
-    mkdir -p "$PROJECTPATH"
+
   else
     _polly
   fi
@@ -70,35 +65,40 @@ function _PickTime() {
   fi
 }
 
+function _THREADS() {
+  wc -l <"$URLS"
+}
+
 function _parallelize() {
   local NOW="date +'%d-%m-%Y-%H-%M-%S'"
-  local THREADS=$(cat urls.txt | wc -l)
-  local parallelARGS=(
-    "--delay=3"
-    "--joblog=$PROJECTPATH/_RADIOHEAD-parallel.log"
-    "--jobs=$THREADS"
+  #"--shuf"
+  #'--load=50%'
+  #'--memfree=128M'
+  #'--noswap'
+  parallelARGS=(
+    #  "--delay=3"
+    "--joblog=$HOME/$project_NAME/_RADIOHEAD-parallel.log"
+    "--jobs=$(_THREADS)"
     "--link"
     "--progress"
-    #"--shuf"
-    #'--load=50%'
-    #'--memfree=128M'
     '--delay'
-    #'--noswap'
-    '--resume-failed'
-    '--retries=3'
-    '--pipepart'
+    '-x'
   )
-
-  local wgetARGS=(
+  wgetARGS=(
     '--random-wait'
     '--no-clobber'
-    "--append-output=$PROJECTPATH/_Wget.log"
-    "--rejected-log=$PROJECTPATH/_WgetRejects.log"
-    "--directory-prefix=$PROJECTPATH"
-    "--timeout=0"
+    "--append-output=$HOME/$project_NAME/_Wget.log"
+    "--rejected-log=$HOME/$project_NAME/_WgetRejects.log"
+    "--directory-prefix=$HOME/$project_NAME/{/}"
+    '--timeout=0'
   )
-  local WGET=$(timeout "$PICKTIME" wget "${wgetARGS[@]}" {})
-  cat $URLS | parallel "${parallelARGS[@]}" "$WGET"
+
+  echo "Printing Job file for downloading"
+  local JOBS="$HOME/$project_NAME/_RADIOHEAD-jobs.txt"
+  parallel --link -x echo "timeout $PICKTIME wget ${wgetARGS[*]} {}" :::: $URLS | tee "$JOBS"
+
+  echo "starting $(_THREADS) threads from $URLS to $HOME/$project_NAME"
+  parallel "${parallelARGS[@]}" :::: $JOBS
 }
 
 _ProjectNameInput && _gdriveInput && _PickTime && _parallelize
